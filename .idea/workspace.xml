@@ -10,7 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="340266e9-30f5-46ad-81f1-579f78c3825c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +49,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/sampledata" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -138,22 +138,10 @@
       <screen x="72" y="27" width="1294" height="741" />
     </state>
     <state x="568" y="212" width="292" height="377" key="AndroidCreateXmlResourceDialog/72.27.1294.741@72.27.1294.741" timestamp="1593887005396" />
-    <state width="1248" height="-42" key="GridCell.Tab.0.bottom" timestamp="1593948303213">
+    <state x="502" y="155" width="424" height="491" key="FileChooserDialogImpl" timestamp="1594417323317">
       <screen x="72" y="27" width="1294" height="741" />
     </state>
-    <state width="1248" height="-42" key="GridCell.Tab.0.bottom/72.27.1294.741@72.27.1294.741" timestamp="1593948303213" />
-    <state width="1248" height="-42" key="GridCell.Tab.0.center" timestamp="1593948303212">
-      <screen x="72" y="27" width="1294" height="741" />
-    </state>
-    <state width="1248" height="-42" key="GridCell.Tab.0.center/72.27.1294.741@72.27.1294.741" timestamp="1593948303212" />
-    <state width="1248" height="-42" key="GridCell.Tab.0.left" timestamp="1593948303212">
-      <screen x="72" y="27" width="1294" height="741" />
-    </state>
-    <state width="1248" height="-42" key="GridCell.Tab.0.left/72.27.1294.741@72.27.1294.741" timestamp="1593948303212" />
-    <state width="1248" height="-42" key="GridCell.Tab.0.right" timestamp="1593948303212">
-      <screen x="72" y="27" width="1294" height="741" />
-    </state>
-    <state width="1248" height="-42" key="GridCell.Tab.0.right/72.27.1294.741@72.27.1294.741" timestamp="1593948303212" />
+    <state x="502" y="155" width="424" height="491" key="FileChooserDialogImpl/72.27.1294.741@72.27.1294.741" timestamp="1594417323317" />
     <state x="491" y="177" width="446" height="447" key="chooseDestDirectoryDialog" timestamp="1593948017023">
       <screen x="72" y="27" width="1294" height="741" />
     </state>

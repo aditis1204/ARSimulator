@@ -16,17 +16,22 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import android.widget.Button;
 import android.widget.ListPopupWindow;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 
+import com.google.ar.core.Pose;
 import com.google.ar.sceneform.AnchorNode;
 
+import com.google.ar.sceneform.math.Quaternion;
+import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
@@ -34,6 +39,8 @@ import com.google.ar.sceneform.ux.TransformableNode;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Math.atan2;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -47,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private Spinner spn_model;
 
     private HitResult myhit;
-//    private float mySize = 70f;
+    private float mySize = 70f;
     private float mytravel=0.01f, distance_x=0f, distance_z=0f, myangle=0f;
 
 
@@ -57,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
-
+    // CompletableFuture requires api level 24
+    // FutureReturnValueIgnored is not valid
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
@@ -75,10 +83,14 @@ public class MainActivity extends AppCompatActivity {
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
 
+        Button accelerate = (Button)findViewById(R.id.accelerate);
         spn_model = (Spinner) findViewById(R.id.spn_model);
-
+        sb_size = (SeekBar) findViewById(R.id.sb_size);
         List<AnchorNode> anchorNodes = new ArrayList<>();
 
+        sb_size.setEnabled(false);
+
+        // Keep immersive view on spinner opening
         Field popup = null;
         try {
             popup = Spinner.class.getDeclaredField("mPopup");
@@ -91,7 +103,53 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        TextView tView = (TextView) findViewById(R.id.textview1);
+      //  tView.setText(sb_size.getProgress() + "/" + sb_size.getMax());
 
+
+
+        sb_size.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            int pval = 0;
+
+
+
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                //tView.setText(pval + "/" + seekBar.getMax());
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser) {
+                // TODO Auto-generated method stub
+                mySize = progress;
+                myanchornode.setLocalScale(new Vector3(progress/70f, progress/70f, progress/70f));
+                tView.setText("Size:  "+progress);
+
+            }
+        });
+
+        accelerate.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (mytranode != null) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        myangle = set(mytranode.getLocalRotation());
+                    }
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                    }
+                    forward(myanchornode);
+                }
+                return true;
+
+            }
+        });
 
 
         for(int i = 0 ; i < sfb_source.length ; i++) {
@@ -131,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
 
                     anchorNode.setParent(arFragment.getArSceneView().getScene());
                     anchorNodes.add(anchorNode);
+                    sb_size.setEnabled(true);
 
                     myanchornode = anchorNode;
 
@@ -145,7 +204,8 @@ public class MainActivity extends AppCompatActivity {
                     andy.select();
 
                     mytranode = andy;
-
+                    mytranode.setLocalRotation(new Quaternion(0f, 0f, 0f, 1f));
+                    myanchornode.setLocalScale(new Vector3(mySize/70f, mySize/70f, mySize/70f));
                 });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
@@ -168,7 +228,42 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    public float set(Quaternion q1) {
+        Vector3 angles = new Vector3();
+        double sqw = q1.w*q1.w;
+        double sqx = q1.x*q1.x;
+        double sqy = q1.y*q1.y;
+        double sqz = q1.z*q1.z;
+        double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+        double test = q1.x*q1.y + q1.z*q1.w;
+        if (test > 0.499*unit) { // singularity at north pole
+            angles.x = (float) (2 * atan2(q1.x,q1.w));
+            angles.y = (float) Math.PI/2;
+            angles.z = 0;
+            return angles.x;
+        }
+        if (test < -0.499*unit) { // singularity at south pole
+            angles.x = (float) (-2 * atan2(q1.x,q1.w));
+            angles.y = (float) (-Math.PI/2);
+            angles.z = 0;
+            return angles.x;
+        }
+        angles.x = (float) atan2(2*q1.y*q1.w-2*q1.x*q1.z , sqx - sqy - sqz + sqw);
+        angles.y = (float) Math.asin(2*test/unit);
+        angles.z = (float) atan2(2*q1.x*q1.w-2*q1.y*q1.z , -sqx + sqy - sqz + sqw);
+        return angles.x;
+    }
 
+
+    void forward(AnchorNode an){
+        distance_x+=Math.sin(myangle)*mytravel;
+        distance_z+=Math.cos(myangle)*mytravel;
+
+        Anchor anchor =  myhit.getTrackable().createAnchor(
+                myhit.getHitPose().compose(Pose.makeTranslation(-distance_x, 0f, -distance_z)));
+
+        an.setAnchor(anchor);
+    }
 
 
 
