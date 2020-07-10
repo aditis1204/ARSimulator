@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AR_Simulator1.iml" filepath="$PROJECT_DIR$/.idea/modules/AR_Simulator1.iml" group="AR_Simulator1" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="AR_Simulator1/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ARSimulator.iml" filepath="$PROJECT_DIR$/.idea/modules/ARSimulator.iml" group="ARSimulator" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="ARSimulator/app" />
     </modules>
   </component>
 </project>
