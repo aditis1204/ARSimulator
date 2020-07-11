@@ -110,8 +110,6 @@ public class MainActivity extends AppCompatActivity {
 
         sb_size.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-            int pval = 0;
-
 
 
 
