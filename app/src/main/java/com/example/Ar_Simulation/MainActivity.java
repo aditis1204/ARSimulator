@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListPopupWindow;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -82,7 +83,8 @@ public class MainActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
-
+        Button r_left = (Button)findViewById(R.id.r_left);
+        Button r_right = (Button)findViewById(R.id.r_right);
         Button accelerate = (Button)findViewById(R.id.accelerate);
         spn_model = (Spinner) findViewById(R.id.spn_model);
         sb_size = (SeekBar) findViewById(R.id.sb_size);
@@ -103,33 +105,21 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        TextView tView = (TextView) findViewById(R.id.textview1);
-      //  tView.setText(sb_size.getProgress() + "/" + sb_size.getMax());
-
 
 
         sb_size.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-
-
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mySize = progress;
+                myanchornode.setLocalScale(new Vector3(progress/70f, progress/70f, progress/70f));
+            }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
+
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                //tView.setText(pval + "/" + seekBar.getMax());
-            }
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                                          boolean fromUser) {
-                // TODO Auto-generated method stub
-                mySize = progress;
-                myanchornode.setLocalScale(new Vector3(progress/70f, progress/70f, progress/70f));
-                tView.setText("Size:  "+progress);
-
             }
         });
 
@@ -149,6 +139,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        r_left.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(mytranode != null){
+                    Quaternion q1 = mytranode.getLocalRotation();
+                    Quaternion q2 = Quaternion.axisAngle(new Vector3(0, 1f, 0f), .5f);
+                    mytranode.setLocalRotation(Quaternion.multiply(q1, q2));
+                    myangle = set(mytranode.getLocalRotation());
+                }
+
+                return true;
+            }
+
+        });
+
+        r_right.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(mytranode != null){
+                    myangle+=0.01f;
+                    Quaternion q1 = mytranode.getLocalRotation();
+                    Quaternion q2 = Quaternion.axisAngle(new Vector3(0, 1f, 0f), -.5f);
+                    mytranode.setLocalRotation(Quaternion.multiply(q1, q2));
+                    myangle = set(mytranode.getLocalRotation());
+                }
+
+                return true;
+            }
+
+        });
 
         for(int i = 0 ; i < sfb_source.length ; i++) {
             int finalI = i;
@@ -224,6 +244,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    void ascend(AnchorNode an, float x, float y, float z){
+        Anchor anchor =  myhit.getTrackable().createAnchor(
+                myhit.getHitPose().compose(Pose.makeTranslation(x/100f, z/100f, y/100f)));
+
+        an.setAnchor(anchor);
+    }
+
+    Quaternion rotate(AnchorNode an, float angle) {
+        //mytranode.setLocalRotation(Quaternion.axisAngle(new Vector3(0, 1f, 0), angle));
+
+        return mytranode.getLocalRotation();
+    }
 
 
     public float set(Quaternion q1) {
@@ -263,7 +295,14 @@ public class MainActivity extends AppCompatActivity {
         an.setAnchor(anchor);
     }
 
-
+    float getMetersBetweenAnchors(Anchor anchor1, Anchor anchor2) {
+        float[] distance_vector = anchor1.getPose().inverse()
+                .compose(anchor2.getPose()).getTranslation();
+        float totalDistanceSquared = 0;
+        for(int i=0; i<3; ++i)
+            totalDistanceSquared += distance_vector[i]*distance_vector[i];
+        return (float) Math.sqrt(totalDistanceSquared);
+    }
 
     public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
         if (Build.VERSION.SDK_INT < VERSION_CODES.N) {

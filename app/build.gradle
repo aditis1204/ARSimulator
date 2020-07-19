@@ -36,6 +36,11 @@ dependencies {
 
 apply plugin: 'com.google.ar.sceneform.plugin'
 
+sceneform.asset('sampledata/model.obj',
+        'default',
+        'sampledata/model.sfa',
+        'src/main/assets/model')
+
 sceneform.asset('sampledata/wheelchair.fbx',
         'default',
         'sampledata/wheelchair.sfa',

@@ -23,6 +23,8 @@
         android:progress="0" />
 
 
+
+
     <TextView
         android:id="@+id/textview1"
         android:layout_width="128dp"
@@ -42,26 +44,29 @@
         android:layout_margin="20dp"
         android:layout_marginHorizontal="10dp"
         android:background="#FFFFFF">
+
         <Spinner
+            android:id="@+id/spn_model"
             style="@style/Widget.AppCompat.DropDownItem.Spinner"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:id="@+id/spn_model"
-            />
+            android:layout_height="58dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="0dp" />
 
 
     </RelativeLayout>
 
+
     <Button
         android:id="@+id/accelerate"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="155dp"
-        android:layout_height="82dp"
+        android:layout_width="142dp"
+        android:layout_height="61dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="13dp"
+        android:layout_marginBottom="12dp"
 
         android:padding="5dp"
 
@@ -72,6 +77,54 @@
 
 
         />
+
+    <Button
+        android:id="@+id/r_left"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="142dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="13dp"
+        android:layout_toLeftOf="@+id/accelerate"
+        android:padding="5dp"
+        android:text="Left"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textColor="#FFF"
+
+        android:textSize="15dp" />
+    <Button
+        android:id="@+id/r_right"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="142dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="13dp"
+        android:layout_toRightOf="@+id/accelerate"
+
+
+
+        android:padding="5dp"
+
+        android:text="Right"
+
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textColor="#FFF"
+
+        android:textSize="15dp"
+
+        />
+
+
+
+
 
 
 </RelativeLayout>
